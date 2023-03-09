@@ -1,7 +1,10 @@
 package com.example.petshop.Controllers;
 
+import com.example.petshop.Enums.StatusAnimal;
 import com.example.petshop.Models.AnimalModel;
 import com.example.petshop.Service.AnimalService;
+import com.example.petshop.Service.EmailService;
+import jakarta.persistence.PreUpdate;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +19,9 @@ public class AnimalController {
 
     @Autowired
     AnimalService animalService;
+
+    @Autowired
+    EmailService emailService;
 
     @GetMapping("")
     public ResponseEntity<List<AnimalModel>> getAllAnimals () {
@@ -40,6 +46,7 @@ public class AnimalController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Você já cadastrou esse animal.");
         }
 
+        animalModel.setStatusAnimal(StatusAnimal.PENDING);
         AnimalModel newAnimal = animalService.addAnimal(animalModel);
         return ResponseEntity.status(HttpStatus.OK).body(newAnimal);
     }
@@ -48,6 +55,14 @@ public class AnimalController {
     public ResponseEntity<Object> updateAnimal(@RequestBody @Valid AnimalModel animalModel) {
         AnimalModel updatedAnimal = animalService.updateAnimal(animalModel);
         return ResponseEntity.status(HttpStatus.CREATED).body(updatedAnimal);
+    }
+
+    @PutMapping("/finished-service")
+    public ResponseEntity<Object> finishedService(@RequestBody @Valid AnimalModel animalModel) {
+        animalModel.setStatusAnimal(StatusAnimal.FINISHED);
+        emailService.sendEmail(animalModel);
+        animalService.updateAnimal(animalModel);
+        return ResponseEntity.status(HttpStatus.OK).body(animalModel);
     }
 
     @DeleteMapping("/delete/{id}")

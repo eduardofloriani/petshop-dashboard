@@ -1,6 +1,7 @@
 package com.example.petshop.Models;
 
 import com.example.petshop.Enums.Fur;
+import com.example.petshop.Enums.StatusAnimal;
 import com.example.petshop.Enums.Treatment;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
@@ -30,6 +31,8 @@ public class AnimalModel implements Serializable {
     private Fur fur;
     @Column(nullable = false)
     private Treatment treatment;
+    @Column(nullable = false)
+    private StatusAnimal statusAnimal;
     @Column(nullable = false)
     private String responsibleName;
     @Column(nullable = false)

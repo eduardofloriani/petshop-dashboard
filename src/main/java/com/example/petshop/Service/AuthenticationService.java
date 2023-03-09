@@ -1,7 +1,6 @@
 package com.example.petshop.Service;
 
 import com.example.petshop.Dtos.AuthenticationResponse;
-import com.example.petshop.Dtos.UserDto;
 import com.example.petshop.Enums.Role;
 import com.example.petshop.Exceptions.RepeatedEmailException;
 import com.example.petshop.Dtos.AuthenticationRequest;
